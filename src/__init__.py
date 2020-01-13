@@ -132,6 +132,7 @@ class TagDialogExtended(QDialog):
             self.addline(t)
         self.cut = gc("select and insert tag dialog shortcut for edit tag dialog")
         if self.cut:
+            self.filterbutton.setToolTip('shortcut: {}'.format(self.cut))
             self.selkey = QShortcut(QKeySequence(self.cut), self)
             self.selkey.activated.connect(self.tagselector)
 
