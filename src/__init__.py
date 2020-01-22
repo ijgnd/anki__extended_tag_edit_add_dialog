@@ -235,7 +235,7 @@ addHook("browser.setupMenus", setupMenu)
 
 def add_to_table_context_menu(browser, menu):
     menu.addAction(myaction)
-addHook("browser.onContextMenu", add_to_table_context_menu)
+#addHook("browser.onContextMenu", add_to_table_context_menu)
 
 
 def edit_tag_dialogFromReviewer():
