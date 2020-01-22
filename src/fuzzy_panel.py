@@ -122,7 +122,7 @@ class FilterDialog(QDialog):
         self.list_box.setAlternatingRowColors(True)
 
         # style
-        if self.night_mode_on:
+        if night_mode_on:
             listWid_sel_bg = "#dfffbb"
             listWid_sel_border = "#fcea20"
             listWid_bg = "#272828"
@@ -141,7 +141,7 @@ class FilterDialog(QDialog):
         # setting the font size for item:selected via stylesheet doesn't work for me in 2020-01
         # https://doc.qt.io/qt-5/richtext-html-subset.html
         # these didn't help: font-size: 20pt;  // doesn't work  20pt; 12pt; x-large - 
-        if self.night_mode_on:
+        if night_mode_on:
             self.setStyleSheet(f""" 
                                 QListWidget{{
                                     background: {listWid_bg};
