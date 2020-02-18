@@ -61,9 +61,10 @@ class PanelInputLine(QLineEdit):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        if not self.testAttribute(Qt.WA_InputMethodEnabled):
+            self.setAttribute(Qt.WA_InputMethodEnabled)
 
     def inputMethodEvent(self, event):
-        self.setAttribute(Qt.WA_InputMethodEnabled)
         super().inputMethodEvent(event)
         self.im_changed.emit(self.text() + event.preeditString())
         
