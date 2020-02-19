@@ -57,10 +57,17 @@ addHook("night_mode_state_changed", refresh_night_mode_state)
 class PanelInputLine(QLineEdit):
     down_pressed = pyqtSignal()
     up_pressed = pyqtSignal()
+    im_changed = pyqtSignal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        if not self.testAttribute(Qt.WA_InputMethodEnabled):
+            self.setAttribute(Qt.WA_InputMethodEnabled)
 
+    def inputMethodEvent(self, event):
+        super().inputMethodEvent(event)
+        self.im_changed.emit(self.text() + event.preeditString())
+        
     def keyPressEvent(self, event):
         super().keyPressEvent(event)
         mod = mw.app.keyboardModifiers() & Qt.ControlModifier
@@ -183,6 +190,7 @@ class FilterDialog(QDialog):
         '''
 
         # connections
+        self.input_line.im_changed.connect(self.text_changed)
         self.input_line.textChanged.connect(self.text_changed)
         self.input_line.returnPressed.connect(self.return_pressed)
         self.input_line.down_pressed.connect(self.down_pressed)
@@ -237,10 +245,11 @@ class FilterDialog(QDialog):
                 item.setHidden(True)
         self.list_box.setCurrentRow(0)
 
-    def text_changed(self):
+    def text_changed(self, search_string = None):
         if self.oldtext in self.keys:
             self.keys.remove(self.oldtext)
-        search_string = self.input_line.text()
+        if not search_string:
+            search_string = self.input_line.text()
         self.oldtext = search_string
         self.keys.append(search_string)
         FILTER_WITH = "slzk_mod"   # "slzk", "fuzzyfinder"
