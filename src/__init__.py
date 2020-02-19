@@ -78,7 +78,17 @@ class MyTagEdit(TagEdit):
         self.isMyTagEdit = True
 
     def keyPressEvent(self, evt):
-        if evt.key() in (Qt.Key_Space, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
+        sp = gc("tag dialog space")
+        if evt.key() == Qt.Key_Space:
+            if sp:
+                if sp.lower() in ["return", "enter"]:
+                    sp = Qt.Key_Space
+                else:
+                    self.setText(self.text() + sp)
+                    return
+            else:
+                sp = Qt.Key_Space
+        if evt.key() in (sp, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
             if (evt.key() == Qt.Key_Tab and evt.modifiers() & Qt.ControlModifier):
                 super().keyPressEvent(evt)
             else:
