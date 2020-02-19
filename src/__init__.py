@@ -41,10 +41,22 @@ def gc(arg, fail=False):
         return fail
 
 
-night_mode_on = False
+use_night_mode = False
 def refresh_night_mode_state(nm_state):
-    global night_mode_on
-    night_mode_on = nm_state
+    global use_night_mode
+    #prior = use_night_mode
+    # use_night_mode = nm_state
+    #if nm_state != prior:
+    #    warn_on_night_mode_change()
+    try:
+        night_mode_conf = __import__("1496166067").night_mode.config
+    except:
+        use_night_mode = nm_state
+    else:
+        if nm_state and night_mode_conf.enable_in_dialogs:
+            use_night_mode = True
+        else:
+            use_night_mode = False
 addHook("night_mode_state_changed", refresh_night_mode_state)
 
 
