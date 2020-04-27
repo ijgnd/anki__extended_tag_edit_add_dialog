@@ -1,5 +1,27 @@
 """
-pyqt dialog that 
+Copyright (c): 2018  Rene Schallner
+               2019- ijgnd
+    
+This file (fuzzy_panel.py) is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This file is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this file.  If not, see <http://www.gnu.org/licenses/>.
+
+
+extracted from https://github.com/renerocksai/sublimeless_zk/tree/6738375c0e371f0c2fde0aa9e539242cfd2b4777/src
+mainly from fuzzypanel.py (both Classes) and utils.py (the helper functions from the 
+bottom of this file)
+
+
+This is a pyqt dialog that 
 - takes a list or dict
 - shows the listitems or dictkeys in a QListWidget that you can filter
 - returns select listitem or dictkey/dictvalue
@@ -16,31 +38,8 @@ syntax for the default search method:
 - " to search for space (e.g. "the wind"), 
 - _ to indicate that the line must start with this string (e.g. _wind won't match some wind)
 
-extracted from https://raw.githubusercontent.com/renerocksai/sublimeless_zk/
-mainly from fuzzypanel.py (both Classes) and utils.py (the helper functions from the 
-bottom of this file)
-
-Copyright (c): 2019 ijgnd
-               2018 Rene Schallner (sublimeless_zk)
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-# from PyQt5.QtCore import *
-# from PyQt5.QtGui import *
-# from PyQt5.QtWidgets import *
 from anki.hooks import addHook
 from aqt import mw
 from aqt.qt import *
