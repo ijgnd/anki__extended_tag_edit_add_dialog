@@ -37,8 +37,6 @@ This add-on uses the file fuzzy_panel.py which has this copyright and permission
     along with this file.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import time
-
 from anki.lang import _
 from anki.hooks import addHook, wrap
 
@@ -100,6 +98,7 @@ class MyTagEdit(TagEdit):
         self.isMyTagEdit = True
 
     def keyPressEvent(self, evt):
+        modctrl = evt.modifiers() & Qt.ControlModifier 
         sp = gc("tag dialog space")
         if evt.key() == Qt.Key_Space:
             if sp:
@@ -123,6 +122,12 @@ class MyTagEdit(TagEdit):
                 # QWidget.keyPressEvent(self, evt)
                 self.parent.addline()
                 return
+        elif (evt.key() == Qt.Key_Up) or (modctrl and evt.key() == Qt.Key_P):
+            self.parent.change_focus_by_one(False)
+            return
+        elif (evt.key() == Qt.Key_Down) or (modctrl and evt.key() == Qt.Key_N):
+            self.parent.change_focus_by_one()
+            return
         else:
             super().keyPressEvent(evt)
 
@@ -142,7 +147,7 @@ class MyBasicEdit(QLineEdit):
         super().focusInEvent(event)
 
     def keyPressEvent(self, evt):
-        modctrl = evt.modifiers() & Qt.ControlModifier 
+        modctrl = evt.modifiers() & Qt.ControlModifier
         sp = None # gc("tag dialog space")
         if evt.key() == Qt.Key_Space:
             if sp:
@@ -243,9 +248,6 @@ class TagDialogExtended(QDialog):
                     else:
                         self.line_list[index-1].setFocus()
                         break
-
-    def focus_three(self):
-        self.line_list[3].setFocus()
 
     def addline(self, tag="", force=False):
         if self.line_list and not self.line_list[-1].text() and not force:  # last lineedit is empty:
