@@ -37,6 +37,8 @@ This add-on uses the file fuzzy_panel.py which has this copyright and permission
     along with this file.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import time
+
 from anki.lang import _
 from anki.hooks import addHook, wrap
 
@@ -46,7 +48,14 @@ from aqt.editcurrent import EditCurrent
 from aqt.editor import Editor
 from aqt.browser import Browser
 from aqt.tagedit import TagEdit
-from aqt.utils import getTag, tooltip, showInfo, restoreGeom, saveGeom  # getText
+from aqt.utils import (
+    getTag, 
+    saveGeom,
+    restoreGeom,
+    # shortcut,
+    showInfo,
+    tooltip,
+)
 from aqt.qt import *
 from aqt.reviewer import Reviewer
 
@@ -75,7 +84,7 @@ TagEdit.tagselector = tagselector
 
 def myinit(self, parent, type=0):
     self.parent = parent
-    cut = gc("select and insert tag dialog shortcut - browser, add, edit current window")
+    cut = gc("editor: show filterdialog to add single tag")
     if cut:
         if hasattr(self, "isMyTagEdit") and self.isMyTagEdit:
             return
@@ -118,9 +127,52 @@ class MyTagEdit(TagEdit):
             super().keyPressEvent(evt)
 
 
+focused_line = None
+
+
+class MyBasicEdit(QLineEdit):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.isMyTagEdit = False
+
+    def focusInEvent(self, event):
+        global focused_line
+        focused_line = self
+        super().focusInEvent(event)
+
+    def keyPressEvent(self, evt):
+        modctrl = evt.modifiers() & Qt.ControlModifier 
+        sp = None # gc("tag dialog space")
+        if evt.key() == Qt.Key_Space:
+            if sp:
+                if sp.lower() in ["return", "enter"]:
+                    sp = Qt.Key_Space
+                else:
+                    self.setText(self.text() + sp)
+                    return
+            else:
+                sp = Qt.Key_Space
+        if evt.key() in (sp, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
+            if (evt.key() == Qt.Key_Tab and modctrl):
+                super().keyPressEvent(evt)
+            else:
+                self.parent.addline()
+                return
+        elif (evt.key() == Qt.Key_Up) or (modctrl and evt.key() == Qt.Key_P):
+            self.parent.change_focus_by_one(False)
+            return
+        elif (evt.key() == Qt.Key_Down) or (modctrl and evt.key() == Qt.Key_N):
+            self.parent.change_focus_by_one()
+            return
+        else:
+            super().keyPressEvent(evt)
+
+
 class TagDialogExtended(QDialog):
     def __init__(self, parent, tags, alltags):
         QDialog.__init__(self, parent, Qt.Window)  # super().__init__(parent)
+        self.basic_mode = gc("basic_but_quick")
         self.parent = parent
         self.alltags = alltags
         self.gridLayout = QGridLayout(self)
@@ -137,7 +189,7 @@ class TagDialogExtended(QDialog):
         self.shortcut.activated.connect(self.accept)
         self.helpButton = QPushButton("add empty line", clicked=lambda: self.addline(force=True))
         self.buttonBox.addButton(self.helpButton, QDialogButtonBox.HelpRole)
-        self.filterbutton = QPushButton("insert tag", clicked=self.tagselector)
+        self.filterbutton = QPushButton("edit tag for current line", clicked=self.tagselector)
         self.buttonBox.addButton(self.filterbutton, QDialogButtonBox.ResetRole)
         self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
         self.buttonBox.accepted.connect(self.accept)
@@ -150,41 +202,76 @@ class TagDialogExtended(QDialog):
             tags = ["",]
         else:
             tags.append("")
-        self.tes = []
+        self.line_list = []
         for t in tags:
             self.addline(t)
-        self.cut = gc("select and insert tag dialog shortcut for edit tag dialog")
+        self.cut = gc("in tag lines dialog: open filterdialog for single tag")
         if self.cut:
             self.filterbutton.setToolTip('shortcut: {}'.format(self.cut))
             self.selkey = QShortcut(QKeySequence(self.cut), self)
-            self.selkey.activated.connect(self.tagselector)
+            self.selkey.activated.connect(self.tagselector)  #self.focus_three) # 
+        self.addnl = gc("in tag lines dialog: insert additional line")
+        if self.addnl:
+            self.helpButton.setToolTip('shortcut: {}'.format(self.addnl))
+            self.addnlscut = QShortcut(QKeySequence(self.addnl), self)
+            self.addnlscut.activated.connect(lambda: self.addline(force=True))       
 
     def tagselector(self):
-        d = FilterDialog(parent=self, values=self.alltags, allownew=True)
+        text = focused_line.text()
+        d = FilterDialog(parent=self, values=self.alltags, allownew=True, prefill=text)
         if d.exec():
-            fcsd = self.focusWidget()
-            if isinstance(fcsd, (MyTagEdit)) and not fcsd.text():
-                fcsd.setText(d.selkey)
-            else:
-                self.addline(tag=d.selkey) 
+            focused_line.setText(d.selkey)
+        else:
+            focused_line.setFocus()
+
+    def change_focus_by_one(self, Down=True):
+        for index, edit in enumerate(self.line_list):
+            if edit == focused_line:
+                if Down:
+                    if index == len(self.line_list)-1:  # if in last line go up
+                        self.line_list[0].setFocus()
+                        break
+                    else:
+                        newidx = index+1
+                        self.line_list[newidx].setFocus()
+                        break
+                else:  # go up
+                    if index == 0:  # if in last line go up
+                        newidx = len(self.line_list)-1
+                        self.line_list[newidx].setFocus()
+                        break
+                    else:
+                        self.line_list[index-1].setFocus()
+                        break
+
+    def focus_three(self):
+        self.line_list[3].setFocus()
 
     def addline(self, tag="", force=False):
-        if self.tes and not self.tes[-1].text() and not force:  # last lineedit is empty:
-            self.tes[-1].setFocus()
-            self.tes[-1].setText(tag)
+        if self.line_list and not self.line_list[-1].text() and not force:  # last lineedit is empty:
+            self.line_list[-1].setFocus()
+            self.line_list[-1].setText(tag)
         else:
-            te = MyTagEdit(self)
-            te.setCol(mw.col)
-            te.setText(tag)
-            self.verticalLayout.addWidget(te)
-            te.hideCompleter()
-            te.setFocus()
-            self.tes.append(te)
+            if self.basic_mode:
+                te = MyBasicEdit(self)
+                te.setText(tag)
+                self.verticalLayout.addWidget(te)
+                te.setFocus()
+                self.line_list.append(te)
+            else:
+                te = MyTagEdit(self)
+                te.setCol(mw.col)
+                te.setText(tag)
+                self.verticalLayout.addWidget(te)
+                te.hideCompleter()
+                te.setFocus()
+                self.line_list.append(te)
 
     def accept(self):
         self.tagstring = ""
-        for t in self.tes:
-            t.hideCompleter()
+        for t in self.line_list:
+            if not self.basic_mode:
+                t.hideCompleter()
             text = t.text()
             if text:
                 self.tagstring += text + " "
@@ -212,7 +299,8 @@ def _edit_tag_dialogFromEditor(editor, index):
         return
     tagString = d.tagstring
     note.setTagsFromStr(tagString)
-    note.flush()
+    if not editor.addMode:
+        note.flush()
     addmode = editor.addMode
     editor.addMode = False
     tooltip('Edited tags "%s"' % tagString)
@@ -223,7 +311,7 @@ def _edit_tag_dialogFromEditor(editor, index):
 # addHook("setupEditorShortcuts", SetupShortcuts) doesn't work when editor is not focused, e.g.
 # if focus is on tag line. So using an editor shortcut here is bad.
 def addAddshortcut(self, mw):
-    cut = gc("tag dialog shortcut - browser, add, edit current window")
+    cut = gc("open tag lines dialog: from editor")
     if cut:
         shortcut = QShortcut(QKeySequence(cut), self)
         shortcut.activated.connect(self.editor.edit_tag_dialogFromEditor)
@@ -248,7 +336,7 @@ def setupMenu(browser):
     global myaction
     myaction = QAction(browser)
     myaction.setText("edit tags")
-    cut = gc("tag dialog shortcut - browser, add, edit current window", False)
+    cut = gc("open tag lines dialog: from editor", False)
     if cut:
         myaction.setShortcut(QKeySequence(cut))
     myaction.triggered.connect(lambda _, b=browser: browser_edit_tags(b))
@@ -275,13 +363,13 @@ def edit_tag_dialogFromReviewer():
 
 
 def addShortcuts(cuts):
-    cuts.append((gc("tag dialog shortcut - reviewer", "w"), edit_tag_dialogFromReviewer))
+    cuts.append((gc("open tag lines dialog: from reviewer", "w"), edit_tag_dialogFromReviewer))
 addHook("reviewStateShortcuts", addShortcuts)
 
 
 def ReviewerContextMenu(view, menu):
     if mw.state != "review":
         return
-    a = menu.addAction('edit tags (shorcut: {})'.format(gc("tag dialog shortcut - reviewer", "w")))
+    a = menu.addAction('edit tags (shorcut: {})'.format(gc("open tag lines dialog: from reviewer", "w")))
     a.triggered.connect(edit_tag_dialogFromReviewer)
 addHook("AnkiWebView.contextMenuEvent", ReviewerContextMenu)
