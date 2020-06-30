@@ -140,9 +140,7 @@ class FilterDialog(QDialog):
         if len(self.fuzzy_items) > 0:
             row = self.list_box.currentRow()
             self.selkey = self.fuzzy_items[row]
-            print(self.selkey)
             if self.selkey not in self.originalkeys:
-                print("not know")
                 k = self.selkey.strip()
                 if " " in k:
                     tooltip('tags may not contain spaces. Aborting ...')
@@ -156,7 +154,6 @@ class FilterDialog(QDialog):
             else:
                 input = self.input_line.text().strip()
                 if input:
-                    print("--{}--".format(input))
                     if " " in input:
                         tooltip('tags may not contain spaces. Aborting ...')
                     else:
