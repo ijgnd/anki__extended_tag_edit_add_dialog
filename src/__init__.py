@@ -140,6 +140,11 @@ class MyTagEdit(TagEdit):
         super().__init__(parent, type=0)
         self.isMyTagEdit = True
 
+    def focusInEvent(self, event):
+        global focused_line
+        focused_line = self
+        super().focusInEvent(event)
+
     def keyPressEvent(self, evt):
         modctrl = evt.modifiers() & Qt.ControlModifier 
         sp = gc("tag dialog space")
