@@ -117,6 +117,7 @@ class MyTagEdit(TagEdit):
                     return
             else:
                 sp = Qt.Key_Space
+        # TODO: check changes from 2020-10 in 44e3ef690fa0a64638e14a51e9e1cd2706715e31
         if evt.key() in (sp, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
             if (evt.key() == Qt.Key_Tab and evt.modifiers() & Qt.ControlModifier):
                 super().keyPressEvent(evt)
