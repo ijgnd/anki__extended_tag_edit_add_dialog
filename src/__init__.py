@@ -2,6 +2,7 @@
 Anki Add-on "Extended tag add/edit dialog"
 
 Copyright (c): 2019- ijgnd
+               Rahul Yerrabelli - commit f9b3fbfdf0cc063a685a1ae86b7749f6769eb374
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -245,14 +246,8 @@ class TagDialogExtended(QDialog):
         self.shortcut.activated.connect(self.accept)
         self.helpButton = QPushButton("add empty line", clicked=lambda: self.addline(force=True))
         self.buttonBox.addButton(self.helpButton, QDialogButtonBox.HelpRole)
-
-
-        ### Rahul Yerrabelli code start
         self.searchButton = QPushButton("search", clicked=lambda: self.search(note_tags=tags, extra_search=""))
         self.buttonBox.addButton(self.searchButton, QDialogButtonBox.ApplyRole)
-        ### Rahul Yerrabelli code end
-
-
         self.filterbutton = QPushButton("edit tag for current line", clicked=self.tagselector)
         self.buttonBox.addButton(self.filterbutton, QDialogButtonBox.ResetRole)
         self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
@@ -283,8 +278,6 @@ class TagDialogExtended(QDialog):
             self.addnlscut = QShortcut(QKeySequence(self.addnl), self)
             self.addnlscut.activated.connect(lambda: self.addline(force=True))       
 
-
-    ### Rahul Yerrabelli code start
     def search(self, note_tags, extra_search=""):
         from aqt import dialogs, gui_hooks, mw
         # Use the current line's text or the last line if the current one is an empty line
@@ -295,8 +288,6 @@ class TagDialogExtended(QDialog):
             self.accept()
         else:
             tooltip("empty tag was selected for search")
-    ### Rahul Yerrabelli code end
-
 
     def tagselector(self):
         text = focused_line.text()
