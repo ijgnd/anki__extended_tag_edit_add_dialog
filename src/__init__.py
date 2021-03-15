@@ -320,7 +320,6 @@ Editor.edit_tag_dialogFromEditor = edit_tag_dialogFromEditor
 
 
 def _edit_tag_dialogFromEditor(editor, index):
-    mw.checkpoint(_("Edit Tags"))
     note = editor.note
     alltags = mw.col.tags.all()
     d = TagDialogExtended(editor.parentWindow, note.tags, alltags)
@@ -379,7 +378,6 @@ def add_to_table_context_menu(browser, menu):
 
 
 def edit_tag_dialogFromReviewer():
-    mw.checkpoint(_("Edit Tags"))
     note = mw.reviewer.card.note()
     alltags = mw.col.tags.all()
     d = TagDialogExtended(mw, note.tags, alltags)
