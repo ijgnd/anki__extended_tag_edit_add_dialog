@@ -43,6 +43,7 @@ import os
 from anki.lang import _
 from anki.hooks import addHook, wrap
 
+from aqt import dialogs
 from aqt import mw
 from aqt.addcards import AddCards
 from aqt.editcurrent import EditCurrent
@@ -238,7 +239,6 @@ class TagDialogExtended(QDialog):
             self.addnlscut.activated.connect(lambda: self.addline(force=True))       
 
     def search(self, note_tags, extra_search=""):
-        from aqt import dialogs, gui_hooks, mw
         # Use the current line's text or the last line if the current one is an empty line
         searched_tag = focused_line.text() or (note_tags[-1] if len(note_tags)>0 else "")
         if searched_tag:
