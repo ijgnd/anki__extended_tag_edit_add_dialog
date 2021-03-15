@@ -208,7 +208,7 @@ class TagDialogExtended(QDialog):
         self.buttonBox.addButton(self.helpButton, QDialogButtonBox.HelpRole)
         self.filterbutton = QPushButton("edit tag for current line", clicked=self.tagselector)
         self.buttonBox.addButton(self.filterbutton, QDialogButtonBox.ResetRole)
-        self.searchButton = QPushButton("search", clicked=lambda: self.search(note_tags=tags, extra_search=""))
+        self.searchButton = QPushButton("search", clicked=lambda: self.do_browser_search(note_tags=tags, extra_search=""))
         self.buttonBox.addButton(self.searchButton, QDialogButtonBox.ResetRole)
         self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
         self.buttonBox.accepted.connect(self.accept)
@@ -238,7 +238,7 @@ class TagDialogExtended(QDialog):
             self.addnlscut = QShortcut(QKeySequence(self.addnl), self)
             self.addnlscut.activated.connect(lambda: self.addline(force=True))       
 
-    def search(self, note_tags, extra_search=""):
+    def do_browser_search(self, note_tags, extra_search=""):
         # Use the current line's text or the last line if the current one is an empty line
         searched_tag = focused_line.text() or (note_tags[-1] if len(note_tags)>0 else "")
         if searched_tag:
