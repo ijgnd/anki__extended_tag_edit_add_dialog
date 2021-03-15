@@ -40,7 +40,6 @@ This add-on uses the file fuzzy_panel.py which has this copyright and permission
 
 import os
 
-from anki.lang import _
 from anki.hooks import addHook, wrap
 
 from aqt import dialogs
