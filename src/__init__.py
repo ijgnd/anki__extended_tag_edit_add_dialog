@@ -71,47 +71,6 @@ def gc(arg, fail=False):
         return fail
 
 
-# startup warning for 2020-06-09
-addon_path = os.path.dirname(__file__)
-user_files_folder = os.path.join(addon_path, "user_files")
-message_2020_06_update = os.path.join(user_files_folder, "message_2020_06_update_shown")
-
-# I can't rely on detecting old config keys from meta.json: If the user never changed the config
-# the old config is not in meta.json but it's completely lost after an update.
-if not os.path.isfile(message_2020_06_update):
-    addonname = "Extended Tag Add/Edit Dialog"
-    msg = (f"""
-This is an infobox from the add-on "<b>{addonname}</b>".
-<br><br>
-It's shown one time because you just installed it or just upgraded. If you just installed this 
-add-on for the first time the rest of this message is not very relevant for you.
-<br><br>
-The latest upgrade from 2020-06-30 changed all shortcuts and their names for this add-on.
-<br><br>
-The default shortcut to open the extended tag edit dialog is now "Ctrl+t, d": You press "Ctrl+t", 
-then release both keys and then press "d". On MacOS instead of "Ctrl+t" you use "Cmd+t".
-<br><br>
-The default shortcut to add a single tag in the editor changed to "Ctrl+t, a".
-<br><br>
-There are two reasons for this change: I can remember these shortcuts more easily because 
-for "Ctrl+<i>t</i>, <i>d</i>" I use the mnemonic "<i>t</i>ag-<i>d</i>ialog" and for 
-"Ctrl+<i>t</i>, <i>a</i>" the mnemonic is "<i>t</i>ag-<i>a</i>dd". Also this add-on is often used 
-together with the add-on <a href="https://ankiweb.net/shared/info/1918380616">High Yield Tags</a> 
-which in the most recent version from 2020-06-30 changed to similar shortcuts.
-<br><br>
-This upgrade also has some improvements like Ctrl+N/Ctrl+P to switch beween the lines 
-of my extended tag dialog. 
-<br><br>The old settings no longer work. If you had a custom config you should reset the config 
-to remove old config keys that are no longer used and then adjust the config to your needs with your 
-custom shortcuts.
-"""
-    )
-    showInfo(msg, textFormat="rich")
-    if not os.path.isdir(user_files_folder):
-        os.makedirs(user_files_folder)
-    open(message_2020_06_update, 'a').close()
-
-
 def tagselector(self):
     alltags = self.col.tags.all()
     d = FilterDialog(parent=self, values=alltags, allownew=True)
