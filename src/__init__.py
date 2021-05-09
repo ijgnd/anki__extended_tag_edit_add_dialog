@@ -364,9 +364,9 @@ addHook("EditorWebView.contextMenuEvent", EditorContextMenu)
 
 # allow to clone from the browser table (when you are not in the editor)
 def browser_edit_tags(browser):
-    if len(browser.selectedCards()) == 1:
+    if browser.editor.note:
         return edit_tag_dialogFromEditor(browser.editor)
-    tooltip("only works if one card is selected")
+    tooltip("only works if one card is selected.<br>the editor at the bottom of the browser window must be visible.", period=5000)
 
 
 def setupMenu(browser):
