@@ -370,19 +370,19 @@ def browser_edit_tags(browser):
 
 
 def setupMenu(browser):
-    global ExTaDiAction
-    ExTaDiAction = QAction(browser)
-    ExTaDiAction.setText("edit tags")
+    self = browser
+    self.ExTaDiAction = QAction(browser)
+    self.ExTaDiAction.setText("edit tags")
     cut = gc("open tag lines dialog: from editor", False)
     if cut:
-        ExTaDiAction.setShortcut(QKeySequence(cut))
-    ExTaDiAction.triggered.connect(lambda _, b=browser: browser_edit_tags(b))
-    browser.form.menuEdit.addAction(ExTaDiAction)
+        self.ExTaDiAction.setShortcut(QKeySequence(cut))
+    self.ExTaDiAction.triggered.connect(lambda _, b=browser: browser_edit_tags(b))
+    browser.form.menuEdit.addAction(self.ExTaDiAction)
 addHook("browser.setupMenus", setupMenu)
 
 
 def add_to_table_context_menu(browser, menu):
-    menu.addAction(ExTaDiAction)
+    menu.addAction(self.ExTaDiAction)
 #addHook("browser.onContextMenu", add_to_table_context_menu)
 
 
