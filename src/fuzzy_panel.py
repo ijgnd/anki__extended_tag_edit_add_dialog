@@ -65,15 +65,15 @@ class PanelInputLine(QLineEdit):
         super().keyPressEvent(event)
         mod = mw.app.keyboardModifiers() & Qt.ControlModifier
         key = event.key()
-        if key == Qt.Key_Down:
+        if key == Qt.Key.Key_Down:
             self.down_pressed.emit()
-        elif key == Qt.Key_Up:
+        elif key == Qt.Key.Key_Up:
             self.up_pressed.emit()
-        elif mod and (key == Qt.Key_N):
+        elif mod and (key == Qt.Key.Key_N):
             self.down_pressed.emit()
-        elif mod and (key == Qt.Key_P):
+        elif mod and (key == Qt.Key.Key_P):
             self.up_pressed.emit()
-        elif mod and (key == Qt.Key_H):
+        elif mod and (key == Qt.Key.Key_H):
             self.up_pressed.emit()
 
 

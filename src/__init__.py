@@ -108,18 +108,18 @@ class MyTagEdit(TagEdit):
     def keyPressEvent(self, evt):
         modctrl = evt.modifiers() & Qt.ControlModifier 
         sp = gc("tag dialog space")
-        if evt.key() == Qt.Key_Space:
+        if evt.key() == Qt.Key.Key_Space:
             if sp:
                 if sp.lower() in ["return", "enter"]:
-                    sp = Qt.Key_Space
+                    sp = Qt.Key.Key_Space
                 else:
                     self.setText(self.text() + sp)
                     return
             else:
-                sp = Qt.Key_Space
+                sp = Qt.Key.Key_Space
         # TODO: check changes from 2020-10 in 44e3ef690fa0a64638e14a51e9e1cd2706715e31
-        if evt.key() in (sp, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
-            if (evt.key() == Qt.Key_Tab and evt.modifiers() & Qt.ControlModifier):
+        if evt.key() in (sp, Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Tab):
+            if (evt.key() == Qt.Key.Key_Tab and evt.modifiers() & Qt.ControlModifier):
                 super().keyPressEvent(evt)
             else:
                 selected_row = self.completer.popup().currentIndex().row()
@@ -131,10 +131,10 @@ class MyTagEdit(TagEdit):
                 # QWidget.keyPressEvent(self, evt)
                 self.parent.addline()
                 return
-        elif (evt.key() == Qt.Key_Up) or (modctrl and evt.key() == Qt.Key_P):
+        elif (evt.key() == Qt.Key.Key_Up) or (modctrl and evt.key() == Qt.Key.Key_P):
             self.parent.change_focus_by_one(False)
             return
-        elif (evt.key() == Qt.Key_Down) or (modctrl and evt.key() == Qt.Key_N):
+        elif (evt.key() == Qt.Key.Key_Down) or (modctrl and evt.key() == Qt.Key.Key_N):
             self.parent.change_focus_by_one()
             return
         else:
@@ -158,25 +158,25 @@ class MyBasicEdit(QLineEdit):
     def keyPressEvent(self, evt):
         modctrl = evt.modifiers() & Qt.ControlModifier
         sp = None # gc("tag dialog space")
-        if evt.key() == Qt.Key_Space:
+        if evt.key() == Qt.Key.Key_Space:
             if sp:
                 if sp.lower() in ["return", "enter"]:
-                    sp = Qt.Key_Space
+                    sp = Qt.Key.Key_Space
                 else:
                     self.setText(self.text() + sp)
                     return
             else:
-                sp = Qt.Key_Space
-        if evt.key() in (sp, Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
-            if (evt.key() == Qt.Key_Tab and modctrl):
+                sp = Qt.Key.Key_Space
+        if evt.key() in (sp, Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Tab):
+            if (evt.key() == Qt.Key.Key_Tab and modctrl):
                 super().keyPressEvent(evt)
             else:
                 self.parent.addline()
                 return
-        elif (evt.key() == Qt.Key_Up) or (modctrl and evt.key() == Qt.Key_P):
+        elif (evt.key() == Qt.Key.Key_Up) or (modctrl and evt.key() == Qt.Key.Key_P):
             self.parent.change_focus_by_one(False)
             return
-        elif (evt.key() == Qt.Key_Down) or (modctrl and evt.key() == Qt.Key_N):
+        elif (evt.key() == Qt.Key.Key_Down) or (modctrl and evt.key() == Qt.Key.Key_N):
             self.parent.change_focus_by_one()
             return
         else:
