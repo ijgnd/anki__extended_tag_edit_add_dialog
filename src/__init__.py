@@ -106,7 +106,7 @@ class MyTagEdit(TagEdit):
         super().focusInEvent(event)
 
     def keyPressEvent(self, evt):
-        modctrl = evt.modifiers() & Qt.ControlModifier 
+        modctrl = evt.modifiers() & Qt.KeyboardModifier.ControlModifier 
         sp = gc("tag dialog space")
         if evt.key() == Qt.Key.Key_Space:
             if sp:
@@ -119,7 +119,7 @@ class MyTagEdit(TagEdit):
                 sp = Qt.Key.Key_Space
         # TODO: check changes from 2020-10 in 44e3ef690fa0a64638e14a51e9e1cd2706715e31
         if evt.key() in (sp, Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Tab):
-            if (evt.key() == Qt.Key.Key_Tab and evt.modifiers() & Qt.ControlModifier):
+            if (evt.key() == Qt.Key.Key_Tab and evt.modifiers() & Qt.KeyboardModifier.ControlModifier):
                 super().keyPressEvent(evt)
             else:
                 selected_row = self.completer.popup().currentIndex().row()
@@ -156,7 +156,7 @@ class MyBasicEdit(QLineEdit):
         super().focusInEvent(event)
 
     def keyPressEvent(self, evt):
-        modctrl = evt.modifiers() & Qt.ControlModifier
+        modctrl = evt.modifiers() & Qt.KeyboardModifier.ControlModifier
         sp = None # gc("tag dialog space")
         if evt.key() == Qt.Key.Key_Space:
             if sp:
@@ -188,7 +188,7 @@ class MyBasicEdit(QLineEdit):
 
 class TagDialogExtended(QDialog):
     def __init__(self, parent, tags, alltags):
-        QDialog.__init__(self, parent, Qt.Window)  # super().__init__(parent)
+        QDialog.__init__(self, parent, Qt.WindowType.Window)  # super().__init__(parent)
         self.basic_mode = gc("basic_but_quick")
         self.parent = parent
         self.alltags = alltags
@@ -200,16 +200,16 @@ class TagDialogExtended(QDialog):
         self.verticalLayout.setObjectName("verticalLayout")
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 1)
         self.buttonBox = QDialogButtonBox(self)
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Ok)
+        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel | QDialogButtonBox.StandardButton.Ok)
         self.shortcut = QShortcut(QKeySequence("Ctrl+Return"), self)
         self.shortcut.activated.connect(self.accept)
         self.helpButton = QPushButton("add empty line", clicked=lambda: self.addline(force=True))
-        self.buttonBox.addButton(self.helpButton, QDialogButtonBox.HelpRole)
+        self.buttonBox.addButton(self.helpButton, QDialogButtonBox.ButtonRole.HelpRole)
         self.filterbutton = QPushButton("edit tag for current line", clicked=self.tagselector)
-        self.buttonBox.addButton(self.filterbutton, QDialogButtonBox.ResetRole)
+        self.buttonBox.addButton(self.filterbutton, QDialogButtonBox.ButtonRole.ResetRole)
         self.searchButton = QPushButton("search", clicked=lambda: self.do_browser_search(extra_search=""))
-        self.buttonBox.addButton(self.searchButton, QDialogButtonBox.ResetRole)
+        self.buttonBox.addButton(self.searchButton, QDialogButtonBox.ButtonRole.ResetRole)
         self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)

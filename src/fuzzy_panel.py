@@ -54,8 +54,8 @@ class PanelInputLine(QLineEdit):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        if not self.testAttribute(Qt.WA_InputMethodEnabled):
-            self.setAttribute(Qt.WA_InputMethodEnabled)
+        if not self.testAttribute(Qt.WidgetAttribute.WA_InputMethodEnabled):
+            self.setAttribute(Qt.WidgetAttribute.WA_InputMethodEnabled)
 
     def inputMethodEvent(self, event):
         super().inputMethodEvent(event)
@@ -63,7 +63,7 @@ class PanelInputLine(QLineEdit):
         
     def keyPressEvent(self, event):
         super().keyPressEvent(event)
-        mod = mw.app.keyboardModifiers() & Qt.ControlModifier
+        mod = mw.app.keyboardModifiers() & Qt.KeyboardModifier.ControlModifier
         key = event.key()
         if key == Qt.Key.Key_Down:
             self.down_pressed.emit()
@@ -108,8 +108,8 @@ class FilterDialog(QDialog):
             self.list_box.insertItem(i, '')
         vlay.addWidget(self.input_line)
         vlay.addWidget(self.list_box)
-        self.buttonbox = QDialogButtonBox(QDialogButtonBox.Ok |
-                                          QDialogButtonBox.Cancel)
+        self.buttonbox = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok |
+                                          QDialogButtonBox.StandardButton.Cancel)
         vlay.addWidget(self.buttonbox)
         # self.buttonbox.accepted.disconnect(self.accept)
         #   leads to: TypeError: disconnect() failed between 'accepted' and 'accept'
