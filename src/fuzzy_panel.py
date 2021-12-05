@@ -217,7 +217,7 @@ class FilterDialog(QDialog):
         self.accept()
 
     def eventFilter(self, watched, event):
-        if event.type() == QEvent.KeyPress and event.matches(QKeySequence.InsertParagraphSeparator):
+        if event.type() == QEvent.Type.KeyPress and event.matches(QKeySequence.InsertParagraphSeparator):
             self.return_pressed()
             return True
         else:
