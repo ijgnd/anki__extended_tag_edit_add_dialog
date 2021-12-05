@@ -43,7 +43,18 @@ syntax for the default search method:
 
 from anki.hooks import addHook
 from aqt import mw
-from aqt.qt import *
+from aqt.qt import (
+    QDialog,
+    QDialogButtonBox,
+    QEvent,
+    QKeySequence,
+    QLineEdit,
+    QListWidget,
+    QVBoxLayout,
+    Qt,
+    QWidget,
+    pyqtSignal,
+)
 from aqt.utils import tooltip, restoreGeom, saveGeom
 
 

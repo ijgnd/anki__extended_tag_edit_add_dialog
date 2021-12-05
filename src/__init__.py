@@ -21,8 +21,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 This add-on uses the file fuzzy_panel.py which has this copyright and permission notice:
 
-    Copyright (c): 2018  Rene Schallner
-                   2019- ijgnd
+    Original work Copyright (c): 2018  Rene Schallner
+    Modified work Copyright (c): 2019- ijgnd
         
     This file (fuzzy_panel.py) is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,7 +57,20 @@ from aqt.utils import (
     showInfo,
     tooltip,
 )
-from aqt.qt import *
+from aqt.qt import (
+    QAction,
+    QDialog,
+    QDialogButtonBox,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QKeySequence,
+    QPushButton,
+    QShortcut,
+    QVBoxLayout,
+    Qt,
+    qtmajor,
+)
 from aqt.reviewer import Reviewer
 
 from .fuzzy_panel import FilterDialog
@@ -335,7 +348,10 @@ def _edit_tag_dialogFromEditor(editor, index):
     if not d.exec():
         return
     tagString = d.tagstring
-    note.setTagsFromStr(tagString)
+    if qtmajor == 5:
+        note.setTagsFromStr(tagString)
+    else:
+        note.set_tags_from_str(tagString)
     if not editor.addMode:
         note.flush()
     addmode = editor.addMode
@@ -392,10 +408,12 @@ def edit_tag_dialogFromReviewer():
     d = TagDialogExtended(mw, note.tags, alltags)
     if not d.exec():
         return
-    tagString = d.tagstring
-    note.setTagsFromStr(tagString)
+    if qtmajor == 5:
+        note.setTagsFromStr(d.tagstring)
+    else:
+        note.set_tags_from_str(d.tagstring)
     note.flush()
-    tooltip('Edited tags "%s"' % tagString)
+    tooltip('Edited tags "%s"' % d.tagstring)
 
 
 def addShortcuts(cuts):
