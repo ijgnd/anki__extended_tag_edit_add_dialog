@@ -41,8 +41,10 @@ This add-on uses the file fuzzy_panel.py which has this copyright and permission
 import os
 
 from anki.hooks import addHook, wrap
+from anki.utils import pointVersion
 
 from aqt import dialogs
+from aqt import gui_hooks
 from aqt import mw
 from aqt.addcards import AddCards
 from aqt.editcurrent import EditCurrent
@@ -368,8 +370,41 @@ def addAddshortcut(self, mw):
     if cut:
         shortcut = QShortcut(QKeySequence(cut), self)
         shortcut.activated.connect(self.editor.edit_tag_dialogFromEditor)
-AddCards.__init__ = wrap(AddCards.__init__, addAddshortcut)
-EditCurrent.__init__ = wrap(EditCurrent.__init__, addAddshortcut)
+if pointVersion() <= 49:
+    AddCards.__init__ = wrap(AddCards.__init__, addAddshortcut)
+    EditCurrent.__init__ = wrap(EditCurrent.__init__, addAddshortcut)
+
+
+def handle_js_message(handled, message, context: Editor):
+    if message == "1135507717_shorcut":
+        editor = context
+        editor.edit_tag_dialogFromEditor()
+        return (True, "no result")
+    else:
+        return handled
+
+
+# Damien wrote about setting about shortcuts in 2.1.50+ with js at
+# https://forums.ankiweb.net/t/emacs-style-shortcuts-with-ctrl-t-in-the-editor-in-45/12280/8
+# in 2.1.50+ the tag line is implemented in js so I no longer have the old limitation
+# so that I can actually set up the shortcut in the Editor (instaed of Addcards or EditCurrent)
+def add_editor_shortcut(editor):
+    cut = gc("open tag lines dialog: from editor")
+    cut = cut.replace("Ctrl", "Control")   # qt want "Ctrl", Js "Control"
+    if not cut:
+        return
+    jsstring = """
+function extended_tag_shortcut_callback(event) {
+    event.preventDefault();
+    pycmd("1135507717_shorcut");
+}
+require("anki/shortcuts").registerShortcut(extended_tag_shortcut_callback, "SHORTCUT");
+""".replace("SHORTCUT", cut)
+    editor.web.eval(jsstring)
+if pointVersion() >= 50:
+    gui_hooks.editor_did_init.append(add_editor_shortcut)
+    gui_hooks.webview_did_receive_js_message.append(handle_js_message)
+
 
 
 def EditorContextMenu(view, menu):
