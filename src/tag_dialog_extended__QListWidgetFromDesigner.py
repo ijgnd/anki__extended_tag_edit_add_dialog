@@ -148,8 +148,14 @@ class TagDialogExtended__qlistwidget_scrollable(QDialog):
         self.make_all_lines_editable()
         row_count = self.form.listWidget.count()
         last_item = self.form.listWidget.item(row_count - 1)
-        self.form.listWidget.setCurrentItem(last_item)
-        self.form.listWidget.setCurrentRow(row_count - 1)
+        # these two focus the last line but I still can't type in it directly
+        # only after arrow_up, arrow_down ??
+        # self.form.listWidget.setCurrentItem(last_item)
+        # self.form.listWidget.setCurrentRow(row_count - 1) # , QItemSelectionModel.SelectionFlag.Select)
+        
+        # relevant when button clicked
+        if not self.form.listWidget.hasFocus():
+            self.form.listWidget.setFocus()
 
     def make_all_lines_editable(self):
         # a lot of unneeded work, but this makes sure I don't have an uneditable
