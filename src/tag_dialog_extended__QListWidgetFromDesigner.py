@@ -20,11 +20,22 @@ from .config import (
     gc,
 )
 
+from .anki_version_detection import anki_point_version
 from .fuzzy_panel import FilterDialog
 if qtmajor == 5:
     from .forms5 import dialog_qlistwidget  # type: ignore  # noqa
 else:
     from .forms6 import dialog_qlistwidget  # type: ignore  # noqa
+
+
+if anki_point_version < 20:
+    class Object():
+        pass
+    theme_manager = Object()
+    theme_manager.night_mode = False
+else:
+    from aqt.theme import theme_manager
+
 
 
 stylesheet_dark = """
@@ -45,6 +56,24 @@ QListWidget::item:selected {
 """
 
 
+stylesheet_light = """
+QListWidget {
+    background-color: #eff0f1;
+}
+QListWidget::item {
+    background-color: #fcfcfc;
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    border-style: solid;
+    border-width: 1px;
+}
+QListWidget::item:selected {
+    border-color: #77c2e8;
+}
+"""
+
+
 
 class TagDialogExtended__qlistwidget_scrollable(QDialog):
     def __init__(self, parent, tags, alltags):
@@ -56,7 +85,8 @@ class TagDialogExtended__qlistwidget_scrollable(QDialog):
         self.form = dialog_qlistwidget.Ui_Dialog()
         self.form.setupUi(self)
         
-        self.form.listWidget.setStyleSheet(stylesheet_dark)
+        sheet_to_use = stylesheet_dark if theme_manager.night_mode else stylesheet_light
+        self.form.listWidget.setStyleSheet(sheet_to_use)
         # self.form.listWidget.currentRowChanged.connect(self.on_row_changed)
 
         self.form.buttonBox.accepted.connect(self.accept)
