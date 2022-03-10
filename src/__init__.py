@@ -58,6 +58,9 @@ def get_tag_dialog(parent, tags, alltags):
     if len(tags) < gc("dialog type: scrollable if more tags than"):
         return TagDialogExtended__BasicOrTagEdit(parent, tags, alltags)
     else:
+        # Extending TagDialogExtended__BasicOrTagEdit with QScrollArea
+        # didn't work well. The scroll position didn't follow line
+        # changes automatically and it seemed complicated to implement this
         return TagDialogExtended__qlistwidget_scrollable(parent, tags, alltags)
 
 
