@@ -72,7 +72,7 @@ Editor.edit_tag_dialogFromEditor = edit_tag_dialogFromEditor
 def _edit_tag_dialogFromEditor(editor, index):
     note = editor.note
     alltags = mw.col.tags.all()
-    d = get_tag_dialog(editor.parentWindow, note.tags, alltags)
+    d = get_tag_dialog(editor.parentWindow, note.tags.copy(), alltags)
     if not d.exec():
         return
     tagString = d.tagstring
