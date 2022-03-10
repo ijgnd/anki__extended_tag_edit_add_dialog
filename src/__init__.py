@@ -5,7 +5,7 @@ from .anki_version_detection import anki_point_version
 from anki.hooks import addHook, wrap
 
 if anki_point_version >= 24:
-from aqt import gui_hooks
+    from aqt import gui_hooks
 from aqt import mw
 from aqt.addcards import AddCards
 from aqt.editcurrent import EditCurrent
@@ -25,6 +25,10 @@ from .config import gc
 from .fuzzy_panel import FilterDialog
 from .tag_dialog_extended__BasicOrTagEdit import TagDialogExtended__BasicOrTagEdit
 from .tag_dialog_extended__QListWidgetFromDesigner import TagDialogExtended__qlistwidget_scrollable
+
+from .shared_variables import init_vars
+init_vars()
+
 
 def tagselector(self):
     all_tags = self.col.tags.all()

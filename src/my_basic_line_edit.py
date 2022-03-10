@@ -1,9 +1,9 @@
 from aqt.qt import *
 
 from .config import (
-    focused_line,
     gc,
 )
+from . import shared_variables
 
 
 class MyBasicEdit(QLineEdit):
@@ -13,8 +13,7 @@ class MyBasicEdit(QLineEdit):
         self.isMyTagEdit = False
 
     def focusInEvent(self, event):
-        global focused_line
-        focused_line = self
+        shared_variables.focused_line = self
         super().focusInEvent(event)
 
     def keyPressEvent(self, evt):

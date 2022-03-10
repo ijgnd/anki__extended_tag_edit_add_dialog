@@ -4,6 +4,7 @@ from aqt.tagedit import TagEdit
 from .config import (
     gc,
 )
+from . import shared_variables
 
 
 class MyTagEdit(TagEdit):
@@ -12,8 +13,7 @@ class MyTagEdit(TagEdit):
         self.isMyTagEdit = True
 
     def focusInEvent(self, event):
-        global focused_line
-        focused_line = self
+        shared_variables.focused_line = self
         super().focusInEvent(event)
 
     def keyPressEvent(self, evt):

@@ -19,10 +19,10 @@ from aqt.utils import (
     tooltip,
 )
 from .config import (
-    focused_line,
     gc,
 )
 
+from . import shared_variables
 from .fuzzy_panel import FilterDialog
 from .my_basic_line_edit import MyBasicEdit
 from .my_tag_edit import MyTagEdit
@@ -91,7 +91,7 @@ class TagDialogExtended__BasicOrTagEdit(QDialog):
     def do_browser_search(self, extra_search=""):
         # Use the current line's text or the last line if the current one is an empty line
         note_tags = self.current_tags_list()
-        searched_tag = focused_line.text() or (note_tags[-1] if len(note_tags)>0 else "")
+        searched_tag = shared_variables.focused_line.text() or (note_tags[-1] if len(note_tags)>0 else "")
         if searched_tag:
             browser = dialogs.open('Browser', mw)
             browser.setFilter('tag:"{}*" {}'.format(searched_tag, extra_search))
@@ -100,16 +100,16 @@ class TagDialogExtended__BasicOrTagEdit(QDialog):
             tooltip("empty tag was selected for search")
 
     def tagselector(self):
-        text = focused_line.text()
+        text = shared_variables.focused_line.text()
         d = FilterDialog(parent=self, values=self.alltags, allownew=True, prefill=text)
         if d.exec():
-            focused_line.setText(d.selkey)
+            shared_variables.focused_line.setText(d.selkey)
         else:
-            focused_line.setFocus()
+            shared_variables.focused_line.setFocus()
 
     def change_focus_by_one(self, Down=True):
         for index, edit in enumerate(self.line_list):
-            if edit == focused_line:
+            if edit == shared_variables.focused_line:
                 if Down:
                     if index == len(self.line_list)-1:  # if in last line go up
                         self.line_list[0].setFocus()
