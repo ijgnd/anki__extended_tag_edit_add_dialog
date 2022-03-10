@@ -1,5 +1,6 @@
 {
-    "basic_but_quick": true,
+    "dialog type: basic_but_quick": true,
+    "dialog type: scrollable if more tags than": 12,
     "editor: show filterdialog to add single tag": "Ctrl+t, a",
     "in tag lines dialog: open filterdialog for single tag": "Ctrl+j",
     "in tag lines dialog: search browser for tag": "Ctrl+s",
