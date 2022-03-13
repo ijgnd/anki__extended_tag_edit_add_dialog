@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Edit tags:</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Edit tags&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;Basic Mode &lt;/span&gt;that handles many tags with &lt;br/&gt;scrolling - the keys Return&amp;amp;Space keys are not handled,&lt;br/&gt;see the add-on config)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

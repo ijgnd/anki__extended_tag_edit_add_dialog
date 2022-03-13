@@ -1,6 +1,10 @@
+general note: check the new and much improved add-on handling in Anki 2.1.50. You might not need this add-on anymore.
+
 ### Config
 
 see the description on [ankiweb](https://ankiweb.net/shared/info/1135507717).
+
+The default dialog this add-on creates does not allow you to scroll to the tags. If you have so many tags on a note that the dialog would be bigger than your screen heigt you need another dialog that allows scrolling. When you want to see this alternative dialog depends on your screen height and general zoom level. Adjust the setting `"dialog type: scrollable if more tags than"` as needed. This scrollable dialog has fewer features, e.g. the space and return key are not handled.
 
 <br/><br/><br/><br/><br/>
 
