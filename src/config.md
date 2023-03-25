@@ -1,6 +1,8 @@
-general note: check the new and much improved add-on handling in Anki 2.1.50. You might not need this add-on anymore.
+general note: check the new and much improved add-on handling in Anki 2.1.50 or later. You might not need this add-on anymore.
 
 ### Config
+
+**You might have to adjust the shortcuts so that they work in your Anki version.**
 
 see the description on [ankiweb](https://ankiweb.net/shared/info/1135507717).
 
