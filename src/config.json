@@ -1,7 +1,7 @@
 {
     "dialog type: basic_but_quick": true,
     "dialog type: scrollable if more tags than": 12,
-    "editor: show filterdialog to add single tag": "Ctrl+t, a",
+    "editor: show filterdialog to add single tag (only working or needed in old Anki versions <.49)": "Ctrl+t, a",
     "in tag lines dialog: open filterdialog for single tag": "Ctrl+j",
     "in tag lines dialog: search browser for tag": "Ctrl+s",
     "in tag lines dialog: insert additional line": "Ctrl+i",

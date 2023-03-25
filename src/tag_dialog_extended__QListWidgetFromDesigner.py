@@ -122,7 +122,7 @@ class TagDialogExtended__qlistwidget_scrollable(QDialog):
             self.browser_scut_key = QShortcut(QKeySequence(self.browser_scut), self)
             self.browser_scut_key.activated.connect(lambda: self.do_browser_search(extra_search=""))
         
-        # don't also set Ctrl+t,a/gc("editor: show filterdialog to add single tag") for 
+        # don't also set Ctrl+t,a/gc("editor: show filterdialog to add single tag (only working or needed in old Anki versions <.49)") for 
         # self.tagselector: What if the user has already set them to the same etc. I'd have
         # to do a lot of checking
         self.addnl = gc("in tag lines dialog: insert additional line")

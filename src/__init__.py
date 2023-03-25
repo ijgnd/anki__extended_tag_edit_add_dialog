@@ -50,7 +50,7 @@ if anki_point_version <= 49:
 
     def myinit(self, parent, type=0):
         self.parent = parent
-        cut = gc("editor: show filterdialog to add single tag")
+        cut = gc("editor: show filterdialog to add single tag (only working or needed in old Anki versions <.49)")
         if cut:
             if hasattr(self, "isMyTagEdit") and self.isMyTagEdit:
                 return
