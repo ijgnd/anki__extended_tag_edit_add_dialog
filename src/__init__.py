@@ -30,28 +30,34 @@ from .shared_variables import init_vars
 init_vars()
 
 
-def tagselector(self):
-    all_tags = self.col.tags.all()
-    d = FilterDialog(parent=self, values=all_tags, allownew=True)
-    if d.exec():
-        # self.setText(self.text() + " " + d.selkey)
-        # order and remove duplicates 
-        tags = mw.col.tags.split(self.text() + " " + d.selkey)
-        uniquetags = list(set(tags))
-        self.setText(mw.col.tags.join(mw.col.tags.canonify(uniquetags))) 
-TagEdit.tagselector = tagselector
+# editor no longer loads TagEdit since commit 5505925 from 2021-06-28/2021-09
+# -> this is broken since .50+
+# this is no longer needed: the new tag line shows suggestions that don't depend
+# on a match of the start of the word, e.g. when typing "omp" Anki also suggests
+# "computer".
+if anki_point_version <= 49:
+    def tagselector(self):
+        all_tags = self.col.tags.all()
+        d = FilterDialog(parent=self, values=all_tags, allownew=True)
+        if d.exec():
+            # self.setText(self.text() + " " + d.selkey)
+            # order and remove duplicates 
+            tags = mw.col.tags.split(self.text() + " " + d.selkey)
+            uniquetags = list(set(tags))
+            self.setText(mw.col.tags.join(mw.col.tags.canonify(uniquetags))) 
+    TagEdit.tagselector = tagselector
 
 
-def myinit(self, parent, type=0):
-    self.parent = parent
-    cut = gc("editor: show filterdialog to add single tag")
-    if cut:
-        if hasattr(self, "isMyTagEdit") and self.isMyTagEdit:
-            return
-        # doesn't work in extended dialog since there are multiple TagEdits
-        self.tagselector_cut = QShortcut(QKeySequence(cut), self)
-        self.tagselector_cut.activated.connect(self.tagselector)
-TagEdit.__init__ = wrap(TagEdit.__init__, myinit)
+    def myinit(self, parent, type=0):
+        self.parent = parent
+        cut = gc("editor: show filterdialog to add single tag")
+        if cut:
+            if hasattr(self, "isMyTagEdit") and self.isMyTagEdit:
+                return
+            # doesn't work in extended dialog since there are multiple TagEdits
+            self.tagselector_cut = QShortcut(QKeySequence(cut), self)
+            self.tagselector_cut.activated.connect(self.tagselector)
+    TagEdit.__init__ = wrap(TagEdit.__init__, myinit)
 
 
 
